@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="/home/sven/Uni/Uni/5. Semester/Geosoft II/Diverses Cosm Parser/httpcomponents-client-4.2.2/lib/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="/home/sven/Uni/Uni/5. Semester/Geosoft II/Diverses Cosm Parser/httpcomponents-client-4.2.2/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="/home/sven/Uni/Uni/5. Semester/Geosoft II/Diverses Cosm Parser/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/sven/Uni/Uni/5. Semester/Geosoft II/Diverses Cosm Parser/log4j-1.2.17.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -148,6 +148,6 @@ public class Utilities {
 		/*
 		 * Grab last timestamp of this param
 		 */
-		return "2013-01-04T01:00:00Z";
+		return "2013-01-02T01:00:00Z";
 	}
 }

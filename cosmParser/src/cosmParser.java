@@ -119,16 +119,20 @@ public class cosmParser {
 				/* Checking response */
 				if (httpResponse != null) {
 					// In case of success the status code is 2xx
-					if (httpResponse.getStatusLine().getStatusCode() / 100 == 2) {
+					if (httpResponse.getStatusLine().getStatusCode() / 100 == 2 ) {
 						//Get the data in the entity
 					    BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
 					    String line = "";
 					    while ((line = rd.readLine()) != null) {
 					    	//System.out.println(line);
 					        result += line;
-					        System.out.println(line);
+					        //System.out.println(line);
 					      }
 					    list.add(result);
+					    
+					    //TODO: Testing, remove
+					    JSONObject obj = (JSONObject) new JSONParser().parse(result);
+					    System.out.println(obj.toJSONString());
 					    //clear the result string!
 					    result = "";
 					}
@@ -148,6 +152,15 @@ public class cosmParser {
 		}
 		
 		return list;
+	}
+	
+	public void parseAllParams(String format) throws Exception{
+		//filter wrong input
+			if ((format != "json") && (format != "xml") && (format != "csv")) throw new Exception("Unsupported format");
+			else {
+				
+			}
+		
 	}
 	
 	
