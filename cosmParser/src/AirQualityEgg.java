@@ -133,6 +133,7 @@ public class AirQualityEgg {
 					/* Checking response */
 					if (httpResponse != null) {
 						// In case of success the status code is 2xx
+						logger.info("http status code: "+httpResponse.getStatusLine().getStatusCode());
 						if (httpResponse.getStatusLine().getStatusCode() / 100 == 2 ) {
 							//Get the data in the entity
 						    BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
@@ -143,11 +144,14 @@ public class AirQualityEgg {
 						    //fill the local json arrays with values
 						    JSONObject obj = (JSONObject) new JSONParser().parse(result);
 						    JSONArray tempArray = (JSONArray) obj.get("datapoints");
-						    if(param == "CO") valuesCO.addAll(tempArray);
-						    else if (param == "humidity") valuesHumidity.addAll(tempArray);
-						    else if (param == "NO2") valuesNO2.addAll(tempArray);
-						    else if (param == "temperature") valuesTemp.addAll(tempArray);
-						    else if (param == "O3") valuesO3.addAll(tempArray);
+						    if (tempArray != null) {
+						    	if(param == "CO") valuesCO.addAll(tempArray);
+							    else if (param == "humidity") valuesHumidity.addAll(tempArray);
+							    else if (param == "NO2") valuesNO2.addAll(tempArray);
+							    else if (param == "temperature") valuesTemp.addAll(tempArray);
+							    else if (param == "O3") valuesO3.addAll(tempArray);
+						    }
+						    //TODO: Jetzt abgefangene Lücken in Daten behandeln
 						    //clear the result string!
 						    result = "";
 						}

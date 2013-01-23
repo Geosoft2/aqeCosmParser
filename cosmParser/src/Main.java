@@ -31,9 +31,13 @@ public class Main {
 		try {
 			
 			AirQualityEgg aqe = new AirQualityEgg(feedID);
-			aqe.updateAllMeasurements();
+			//aqe.updateAllMeasurements();
 			//aqe.updateMeasurement("CO");
-			aqe.writeToDatabase("CO");
+			//aqe.writeToDatabase("CO");
+			
+			eggSeeker seeker = new eggSeeker();
+			
+			System.out.println(seeker.getEggsByTag("munster+egg").toString());
 			
 			
 			
