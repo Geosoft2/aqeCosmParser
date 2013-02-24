@@ -1,3 +1,5 @@
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -6,19 +8,24 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 /**
- * Utility class that provides methods that are usefull for the whole program.
+ * Utility class that provides methods that are useful for the whole program.
  * 
  * @author sven
  * 
  */
 public class Utilities {
-	
-	public static final long HOUR = 3600*1000; // in milli-seconds.
+		
+	private Logger logger;
 
-	// empty constructor
+	//constructor
 	public Utilities() {
-
+		// logging stuff
+		logger = Logger.getLogger(this.getClass());
+		PropertyConfigurator.configure("log4j.properties");
 	}
 
 	/**
@@ -52,7 +59,6 @@ public class Utilities {
 			//TODO: rethink border issues
 			//while start date is smaller than end date add duration to start date			
 			while (start.compareTo(end)<=0){
-				//System.out.println(format.format(start));
 				list.add(format.format(start));
 				//set calendar time to current start value
 				cal.setTime(start);
@@ -60,96 +66,96 @@ public class Utilities {
 				cal.add(Calendar.HOUR_OF_DAY, duration);
 				//subtract one second to decrement the upper interval border
 				cal.add(Calendar.SECOND, -1);
-				//System.out.println(format.format(cal.getTime()));
-				//TODO: Das geht bestimmt auch eleganter... Hier könnte es noch irgendwann in die Hose gehen
+				//TODO: works, but looks weird...
+				// if current date is still before the end date -> add to list
 				if(cal.getTime().compareTo(end)<=0)list.add(format.format(cal.getTime()));
+				// add one second
 				cal.add(Calendar.SECOND, +1);
 				start = cal.getTime();
 			}
-			//System.out.println(format.format(start));
-			//list.add(format.format(start));
-			//System.out.println(format.format(end));
-			list.add(format.format(end));
-
 			
+			// if list contains an odd number of elements, attach the end timestamp, seems to work
+			if(list.size()%2!=0) list.add(format.format(end));
 			
-			
-			
+			//logger.info(list.size());
+			//logger.info(list);
 			
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			logger.warn("Problems splitting time interval: "+list);
 			e.printStackTrace();
 		}
 		
 		return list;
 		
-		
 	}
-	
-	/**
-     * Returns the current time as String like this: 2012-11-23T13:41:15Z
-     * 
-     * @return Current timestamp.
-     */
-    @SuppressWarnings("deprecation")
-    public String getCurrentTimeOld()
-    {
-	Date currentDate = new Date(System.currentTimeMillis());
-
-	int year = currentDate.getYear() + 1900;
-	int month = currentDate.getMonth() + 1;
-	int day = currentDate.getDate();
-	int hours = currentDate.getHours();
-	int minutes = currentDate.getMinutes();
-	int seconds = currentDate.getSeconds();
-
-	int[] values = { month, day, hours, minutes, seconds };
-
-	String[] valuesAsStrings = new String[values.length];
-
-	for (int i = 0; i < values.length; i++)
-	{
-	    if (values[i] < 10)
-	    {
-		valuesAsStrings[i] = "0" + values[i];
-	    }
-	    else
-	    {
-		valuesAsStrings[i] = "" + values[i];
-	    }
-	}
-
-	String timestamp = year + "-" + valuesAsStrings[0] + "-"
-		+ valuesAsStrings[1] + "T" + valuesAsStrings[2] + ":"
-		+ valuesAsStrings[3] + ":" + valuesAsStrings[4] + "Z";
-
-	return timestamp;
-    }
     
     /**
-     * 
+     * Get the current time as a String timestamp
      * @param param
-     * @return
+     * @return current timestamp as string
      */
-    public String getCurrentTime(){
+    public String getCurrentTimeAsString(){
     	//calendar object to read out time from
     	Calendar cal = Calendar.getInstance();
     	//the format that we want
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-		
 		//return the calendars current time, formatted as above
-		return (format.format(cal.getTime()));
-		
+		return (format.format(cal.getTime()));		
+    }
+    
+    /**
+     * Get the current time as a Date object
+     * @param param
+     * @return current time as Date
+     */
+    public Date getCurrentTimeAsDate(){
+    	//calendar object to read out time from
+    	Calendar cal = Calendar.getInstance();
+		//return the calendars current time, formatted as above
+		return cal.getTime();
+    }
+    
+    /**
+     * Method for substracting hours from date
+     * @param date to be modified
+     * @param hours to be substracted
+     * @return modified date
+     */
+    public Date substractHours(Date date, int hours){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.HOUR, -hours);
+		return cal.getTime();
+    }
+    
+    
+    /**
+     * Convert a string timestamp to a date object
+     * @param timestamp
+     * @return Date representation of timestamp parameter
+     * @throws ParseException
+     */
+    public Date toDate(String timestamp) throws ParseException{
+		//format of timestamp string
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
+    	return (format.parse(timestamp));
+    }
+    
+    /**
+     * Method that converts a timestamp with time zone read out of a psql database to a formatted string
+     * @param date
+     * @return
+     */
+    public String sqlDateToCosmString(Date date){
+    	Calendar cal = Calendar.getInstance();
+    	//the format we want
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    	//set date of calendar to parameter date
+    	cal.setTime(date);
+    	// return fomratted date
+    	return format.format(cal.getTime());
+    	
     }
 
-
-    public String getLastUpdateTime(String param){
-		//TODO: Implement method (feed ID missing)
-		/*
-		 * Grab last timestamp of this param
-		 */
-		return "2013-01-02T01:00:00Z";
-	}
-    
     
 }

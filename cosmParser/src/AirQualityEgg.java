@@ -5,13 +5,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Properties;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.json.simple.JSONArray;
@@ -21,7 +25,9 @@ import org.json.simple.parser.ParseException;
 
 /**
  * This class represents a Air Quality Egg to encapsulate data and methods.
- * (Better than thousands of array lists...)
+ * An Air Quality Egg object can:
+ * - can get it's measurements from the cosm platform
+ * - can store it's updated measurements to the database
  * @author sven
  *
  */
@@ -47,6 +53,8 @@ public class AirQualityEgg {
 	private JSONArray valuesNO2;
 	private JSONArray valuesO3;
 	private JSONArray valuesTemp;
+	
+	private sensorSet aqeSensors = sensorSet.getInstance();
 	
 	/**
 	 * Well, it's just a constructor
@@ -101,23 +109,32 @@ public class AirQualityEgg {
 	 * @throws Exception
 	 */
 	public void updateMeasurement(String param) throws Exception{
-		
+		databaseCon dbCon = new databaseCon();
 		String result = "";
 		//filter wrong parameters
 		if ((param != "CO") && (param != "humidity") && (param != "NO2") && (param != "temperature") && (param != "O3")) throw new Exception("Unsupported parameter");
 		else {
+			String phenomenon_id = "";
+			if (param == "CO") phenomenon_id = aqeSensors.getCoPhenomenon();
+			else if (param == "humidity") phenomenon_id = aqeSensors.getHumidityPhenomenon();
+			else if (param == "NO2") phenomenon_id = aqeSensors.getNo2Phenomenon();
+			else if (param == "temperature") phenomenon_id = aqeSensors.getTemperaturePhenomenon();
+			else if (param == "O3") phenomenon_id = aqeSensors.getO3Phenomenon();
+
 			//get the time interval for that the request has to be constructed
-			String end = utils.getCurrentTime();
-			String start = utils.getLastUpdateTime(param);
+			Date date = dbCon.getLatestUpdate(feedID, phenomenon_id);
+			String start = utils.sqlDateToCosmString(date);
+			String end = utils.getCurrentTimeAsString();
+			logger.info("start: "+ start + "  end: "+end);
 			
 			//get the collection of intervals like: 2012-12-02T11:00:01Z, 2012-12-02T23:00:00Z, 2012-12-02T23:00:01Z, 2012-12-03T11:00:00Z
 			ArrayList<String> intervalCollection = utils.splitInterval(start, end, splitIntervalDuration);
+			//logger.info(this.feedID+": "+intervalCollection);
 			Iterator icIterator = intervalCollection.listIterator();
 			
 			//iterate over intervals and make cosm api requests
 			while (icIterator.hasNext()){
 				
-				//TODO: make limit adjustment possible
 				//Create http GET request with parameter, format, start- and end time
 				String getString ="http://api.cosm.com/v2/feeds/"+feedID+"/datastreams/"+param+".json?start="+icIterator.next()+"&end="+icIterator.next()+"&interval="+interval+"&limit="+limit;
 				logger.info(getString);
@@ -139,6 +156,7 @@ public class AirQualityEgg {
 						    BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
 						    String line = "";
 						    while ((line = rd.readLine()) != null) {
+						    	//logger.info(line);
 						        result += line;
 						      }
 						    //fill the local json arrays with values
@@ -154,16 +172,24 @@ public class AirQualityEgg {
 						    //TODO: Jetzt abgefangene Lücken in Daten behandeln
 						    //clear the result string!
 						    result = "";
+						    
 						}
 						else {
 							//TODO: Do something that makes sense: Just missing values
-							System.out.println("Ooops");
+							//ClientConnectionManager man = httpClient.getConnectionManager();
+							//man.closeExpiredConnections();
+							//EntityUtils.consume((HttpEntity) httpResponse);
+							//release the http client if the request fails and make it available again
+							if( httpResponse.getEntity() != null ) {
+						         httpResponse.getEntity().consumeContent();
+						      }
+							logger.warn("Ooops");
 						}
 						
 					}
 
 				} catch (Exception e) {
-					System.out.println("Something went wrong");
+					logger.warn("Something went wrong");
 					e.printStackTrace();
 				}
 			}
@@ -190,26 +216,85 @@ public class AirQualityEgg {
 	 * @param param
 	 */
 	public void writeToDatabase(String param){
-		Iterator iter = null;
-		if(param == "CO") iter = valuesCO.iterator();
-	    else if (param == "humidity") iter = valuesHumidity.iterator();
-	    else if (param == "NO2") iter = valuesNO2.iterator();
-	    else if (param == "temperature") iter = valuesTemp.iterator();
-	    else if (param == "O3") iter = valuesO3.iterator();
-		
-		//iterate over datapoints collection
-				while (iter.hasNext()){
-					JSONObject datapoint = (JSONObject) iter.next();
-					String timestamp = datapoint.get("at").toString();
-					double value = Double.valueOf(datapoint.get("value").toString());
-					//TODO: add connection to database
-					logger.info(timestamp+" "+value);
-				}
-		
+		try {
+			databaseCon dbCon = new databaseCon();
+			Iterator iter = null;
+			String procedure_id = "";
+			String phenomenon_id = "";
+			String offering_id = "";
+			if(param == "CO"){
+				iter = valuesCO.iterator();
+				procedure_id = aqeSensors.getCoProcedure();
+				phenomenon_id = aqeSensors.getCoPhenomenon();
+				offering_id = aqeSensors.getCoOffering();
+			}
+		    else if (param == "humidity"){
+		    	iter = valuesHumidity.iterator();
+		    	procedure_id = aqeSensors.getHumidityProcedure();
+				phenomenon_id = aqeSensors.getHumidityPhenomenon();
+				offering_id = aqeSensors.getHumidityOffering();
+		    }
+		    else if (param == "NO2"){
+		    	iter = valuesNO2.iterator();
+		    	procedure_id = aqeSensors.getNo2Procedure();
+				phenomenon_id = aqeSensors.getNo2Phenomenon();
+				offering_id = aqeSensors.getNo2Offering();
+		    }
+		    else if (param == "temperature"){
+		    	iter = valuesTemp.iterator();
+		    	procedure_id = aqeSensors.getTemperatureProcedure();
+				phenomenon_id = aqeSensors.getTemperaturePhenomenon();
+				offering_id = aqeSensors.getTemperatureOffering();
+		    }
+		    else if (param == "O3"){
+		    	iter = valuesO3.iterator();
+		    	procedure_id = aqeSensors.getO3Procedure();
+				phenomenon_id = aqeSensors.getO3Phenomenon();
+				offering_id = aqeSensors.getO3Offering();
+		    }
+			//logger.info("write to database "+param);
+			//iterate over datapoints collection
+			//logger.info(iter.hasNext());
+					while (iter.hasNext()){
+						//logger.info("prepare query");
+						JSONObject datapoint = (JSONObject) iter.next();
+						String timestamp = datapoint.get("at").toString();
+						Date date = utils.toDate(timestamp);
+						double value = Double.valueOf(datapoint.get("value").toString());
+						dbCon.insertMeasurement(date, procedure_id, feedID, phenomenon_id, offering_id, value);
+						//logger.info(timestamp+" "+value);
+					}
+			dbCon.disconnect();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (java.text.ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
-	 * Method that tests concatination of json arrays
+	 * Method that writes all values to database.
+	 */
+	public void writeAllToDatabase(){
+		this.writeToDatabase("CO");
+		this.writeToDatabase("humidity");
+		this.writeToDatabase("NO2");
+		this.writeToDatabase("temperature");
+		this.writeToDatabase("O3");
+
+	}
+	
+	
+	
+	/**
+	 * Method that tests concatenation of json arrays
+	 * (not used in main program)
 	 */
 	public void jsontTester(){
 		JSONArray a1 = new JSONArray();

@@ -22,24 +22,49 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-	
-		
-		String feedID = ""+75759;
-		//String[] params = {"CO", "humidity", "NO2", "O3", "temperature"};
 
 		try {
 			
-			AirQualityEgg aqe = new AirQualityEgg(feedID);
-			//aqe.updateAllMeasurements();
-			//aqe.updateMeasurement("CO");
-			//aqe.writeToDatabase("CO");
-			
+			//create new seeker object	
 			eggSeeker seeker = new eggSeeker();
+
+			//prepare the database
+			seeker.addEggPhenomena();
+			seeker.addEggProcedures();
+			seeker.addEggOfferings();
+			seeker.linkPhenomenonToOffering();
+			seeker.linkProcedureToOffering();
+			seeker.linkProcedureToPhenomenon();
 			
-			System.out.println(seeker.getEggsByTag("munster+egg").toString());
 			
+			//Workflow for retrieving all AQE from with tag "munster egg" from cosm and save them to the database.
+			ArrayList<String> feedIdList = seeker.getEggsByTag("munster+egg");
+			//Iterate over feedID collection
+			Iterator feedIdIter = feedIdList.iterator();
+			while (feedIdIter.hasNext()){
+				//save to database
+				seeker.addNewEgg(feedIdIter.next().toString());
+			}
+			//get all eggs in database
+			databaseCon dbCon = new databaseCon();
+			//eggList is now the collection of AQE in database
+			feedIdList = dbCon.getAllFeatures();
+			feedIdIter = feedIdList.iterator();
 			
+			//array list of air quality eggs
+			ArrayList<AirQualityEgg> aqeList = new ArrayList<AirQualityEgg>();
+			while(feedIdIter.hasNext()){
+				aqeList.add(new AirQualityEgg(feedIdIter.next().toString()));
+			}
+			
+			//update and store measurements
+			Iterator aqeIterator = aqeList.iterator();
+			while(aqeIterator.hasNext()){
+				AirQualityEgg aqe = (AirQualityEgg) aqeIterator.next();
+				aqe.updateAllMeasurements();
+				//aqe.logMeasurements();
+				aqe.writeAllToDatabase();
+			}
 			
 			
 		} catch (Exception e) {
