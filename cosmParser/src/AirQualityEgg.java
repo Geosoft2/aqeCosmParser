@@ -156,7 +156,7 @@ public class AirQualityEgg {
 						    BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
 						    String line = "";
 						    while ((line = rd.readLine()) != null) {
-						    	//logger.info(line);
+						    	logger.info(line);
 						        result += line;
 						      }
 						    //fill the local json arrays with values

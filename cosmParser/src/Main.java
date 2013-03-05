@@ -22,7 +22,8 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
+		
+		
 		try {
 			
 			//create new seeker object	
@@ -40,7 +41,7 @@ public class Main {
 			//Workflow for retrieving all AQE from with tag "munster egg" from cosm and save them to the database.
 			ArrayList<String> feedIdList = seeker.getEggsByTag("munster+egg");
 			//Iterate over feedID collection
-			Iterator feedIdIter = feedIdList.iterator();
+			Iterator<String> feedIdIter = feedIdList.iterator();
 			while (feedIdIter.hasNext()){
 				//save to database
 				seeker.addNewEgg(feedIdIter.next().toString());
@@ -58,7 +59,7 @@ public class Main {
 			}
 			
 			//update and store measurements
-			Iterator aqeIterator = aqeList.iterator();
+			Iterator<AirQualityEgg> aqeIterator = aqeList.iterator();
 			while(aqeIterator.hasNext()){
 				AirQualityEgg aqe = (AirQualityEgg) aqeIterator.next();
 				aqe.updateAllMeasurements();
@@ -70,7 +71,7 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 	}
 
 }

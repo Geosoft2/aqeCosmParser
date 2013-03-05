@@ -11,6 +11,13 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+/*Notes on dates:
+ * cosm: 14:00:00Z (Z is offset of +1 hour)
+ * our time: 15:00:00
+ * sql time: 14:00:00+01
+ * 
+ */
+
 /**
  * Utility class that provides methods that are useful for the whole program.
  * 
@@ -136,8 +143,20 @@ public class Utilities {
      * @throws ParseException
      */
     public Date toDate(String timestamp) throws ParseException{
+    	//remove last three digits
+    	/*
+    	 * http://stackoverflow.com/questions/5636491/date-object-simpledateformat-not-parsing-timestamp-string-correctly-in-java-and
+    	 * fractional seconds = 0.271816 seconds
+		 * What DateFormat sees is 271816 / 1000 of a second
+		 * 271816 / 1000 == 271 seconds
+		 * 271 / 60 = 4 minutes
+		 * 271 % 60 = 31 seconds
+		 *17:11:15 to 17:15:46 is exactly 4 minutes, 31 seconds off
+    	 */
+    	timestamp = timestamp.substring(0, timestamp.length()-4)+"Z";
 		//format of timestamp string
-    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    	//SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     	return (format.parse(timestamp));
     }
     
@@ -152,10 +171,17 @@ public class Utilities {
     	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     	//set date of calendar to parameter date
     	cal.setTime(date);
-    	// return fomratted date
+    	// return formatted date
     	return format.format(cal.getTime());
     	
     }
+    
+    public Date TestToDate(String timestamp) throws ParseException{
+		//format of timestamp string
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    	return (format.parse(timestamp));
+    }
+    
 
     
 }
