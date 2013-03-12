@@ -433,7 +433,7 @@ public class databaseCon {
 			ResultSet rs = stmt.executeQuery(query);
 			if (rs.next()  && rs.getObject("date")!=null){
 				result = rs.getTimestamp("date");
-				//logger.info(result.toString());
+				logger.info("myDate: "+result.toString());
 			}
 		} catch (SQLException e) {
 			logger.warn("Invalid query");
@@ -443,11 +443,11 @@ public class databaseCon {
 	}
 	
 	/**
-	 * Function returns all features of interest ids
+	 * Function returns all features of interest ids that are not foi_geist and foi_weseler ( = no air quality eggs)
 	 * @return ArrayList of Strings
 	 */
 	public ArrayList<String> getAllFeatures(){
-		String query = "SELECT feature_of_interest_id FROM feature_of_interest";
+		String query = "SELECT feature_of_interest_id FROM feature_of_interest WHERE feature_of_interest_id!='foi_geist' AND feature_of_interest_id!='foi_weseler'";
 		ArrayList<String> list = new ArrayList<String>();
 		try {
 			Statement stmt = con.createStatement();
