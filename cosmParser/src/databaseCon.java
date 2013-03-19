@@ -426,8 +426,8 @@ public class databaseCon {
 	 */
 	public Date getLatestUpdate(String feature_of_interest_id, String phenomenon_id){
 		String query = "SELECT max(time_stamp) AS date FROM observation WHERE feature_of_interest_id='"+feature_of_interest_id+"' AND phenomenon_id='"+phenomenon_id+"'";
-		//if there's not yet an entry take the current time and substract 72 hours
-		Date result = utils.substractHours(utils.getCurrentTimeAsDate(), 72);
+		//if there's not yet an entry take the current time and substract 12 hours
+		Date result = utils.substractHours(utils.getCurrentTimeAsDate(), 12);
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
@@ -443,11 +443,11 @@ public class databaseCon {
 	}
 	
 	/**
-	 * Function returns all features of interest ids that are not foi_geist and foi_weseler ( = no air quality eggs)
+	 * Function returns all features of interest ids that are not Geist and Weseler ( = no air quality eggs)
 	 * @return ArrayList of Strings
 	 */
 	public ArrayList<String> getAllFeatures(){
-		String query = "SELECT feature_of_interest_id FROM feature_of_interest WHERE feature_of_interest_id!='foi_geist' AND feature_of_interest_id!='foi_weseler'";
+		String query = "SELECT feature_of_interest_id FROM feature_of_interest WHERE feature_of_interest_id!='Geist' AND feature_of_interest_id!='Weseler'";
 		ArrayList<String> list = new ArrayList<String>();
 		try {
 			Statement stmt = con.createStatement();
