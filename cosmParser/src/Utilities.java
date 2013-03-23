@@ -148,14 +148,27 @@ public class Utilities {
 		return cal.getTime();
     }
     
+    /**
+     * Method for adding minutes to date
+     * @param date to be modified
+     * @param minutes to be added
+     * @return modified date
+     */
+    public Date addMinutes(Date date, int minutes){
+    	Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.MINUTE, +minutes);
+		return cal.getTime();
+    }
+    
     
     /**
-     * Convert a string timestamp to a date object
+     * Convert a overlong string timestamp to a date object.  - yyyy-MM-dd'T'HH:mm:ss.SSS'Z' - timestamp has SSSSSS instead of SSS
      * @param timestamp
      * @return Date representation of timestamp parameter
      * @throws ParseException
      */
-    public Date toDate(String timestamp) throws ParseException{
+    public Date overlongTimestampToDate(String timestamp) throws ParseException{
     	//remove last three digits
     	/*
     	 * http://stackoverflow.com/questions/5636491/date-object-simpledateformat-not-parsing-timestamp-string-correctly-in-java-and
@@ -169,6 +182,19 @@ public class Utilities {
     	timestamp = timestamp.substring(0, timestamp.length()-4)+"Z";
 		//format of timestamp string
     	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    	//SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    	return (format.parse(timestamp));
+    }
+    
+    /**
+     * Convert a simple string timestamp to a date object
+     * @param timestamp
+     * @return Date representation of timestamp parameter
+     * @throws ParseException
+     */
+    public Date simpleTimestampToDate(String timestamp) throws ParseException{
+		//format of timestamp string
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     	//SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     	return (format.parse(timestamp));
     }
