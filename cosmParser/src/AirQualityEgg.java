@@ -163,6 +163,7 @@ public class AirQualityEgg {
 						    JSONObject obj = (JSONObject) new JSONParser().parse(result);
 						    JSONArray tempArray = (JSONArray) obj.get("datapoints");
 						    if (tempArray != null) {
+							    logger.info("my array:    "+ tempArray);
 						    	if(param == "CO") valuesCO.addAll(tempArray);
 							    else if (param == "humidity") valuesHumidity.addAll(tempArray);
 							    else if (param == "NO2") valuesNO2.addAll(tempArray);
@@ -259,7 +260,7 @@ public class AirQualityEgg {
 						//logger.info("prepare query");
 						JSONObject datapoint = (JSONObject) iter.next();
 						String timestamp = datapoint.get("at").toString();
-						Date date = utils.toDate(timestamp);
+						Date date = utils.overlongTimestampToDate(timestamp);
 						double value = Double.valueOf(datapoint.get("value").toString());
 						dbCon.insertMeasurement(date, procedure_id, feedID, phenomenon_id, offering_id, value);
 						//logger.info(timestamp+" "+value);
