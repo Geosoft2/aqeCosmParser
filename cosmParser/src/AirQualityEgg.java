@@ -311,6 +311,56 @@ public class AirQualityEgg {
 		
 	}
 
+
+	public JSONArray getValuesCO() {
+		return valuesCO;
+	}
+
+
+	public void setValuesCO(JSONArray valuesCO) {
+		this.valuesCO = valuesCO;
+	}
+
+
+	public JSONArray getValuesHumidity() {
+		return valuesHumidity;
+	}
+
+
+	public void setValuesHumidity(JSONArray valuesHumidity) {
+		this.valuesHumidity = valuesHumidity;
+	}
+
+
+	public JSONArray getValuesNO2() {
+		return valuesNO2;
+	}
+
+
+	public void setValuesNO2(JSONArray valuesNO2) {
+		this.valuesNO2 = valuesNO2;
+	}
+
+
+	public JSONArray getValuesO3() {
+		return valuesO3;
+	}
+
+
+	public void setValuesO3(JSONArray valuesO3) {
+		this.valuesO3 = valuesO3;
+	}
+
+
+	public JSONArray getValuesTemp() {
+		return valuesTemp;
+	}
+
+
+	public void setValuesTemp(JSONArray valuesTemp) {
+		this.valuesTemp = valuesTemp;
+	}
+
 	
 	
 	
