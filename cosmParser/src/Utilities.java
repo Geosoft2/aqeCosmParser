@@ -135,6 +135,19 @@ public class Utilities {
 		return cal.getTime();
     }
     
+    /**
+     * Method for adding seconds to date
+     * @param date to be modified
+     * @param seconds to be added
+     * @return modified date
+     */
+    public Date addSeconds(Date date, int seconds){
+    	Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.SECOND, +seconds);
+		return cal.getTime();
+    }
+    
     
     /**
      * Convert a string timestamp to a date object
