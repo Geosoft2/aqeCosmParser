@@ -55,7 +55,8 @@ public class Utilities {
 		try {
 			//parse given interval borders (strings) to Date objects
 			//TODO: Rethink: Increment lower border of first interval with one second
-			Date start = format.parse(timestampStart);
+			//Date start = format.parse(timestampStart);
+			Date start = this.overlongTimestampToDate(timestampStart);
 			cal.setTime(start);
 			cal.add(Calendar.SECOND, +1);
 			start = cal.getTime();
@@ -207,7 +208,7 @@ public class Utilities {
     public String sqlDateToCosmString(Date date){
     	Calendar cal = Calendar.getInstance();
     	//the format we want
-    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
     	//set date of calendar to parameter date
     	cal.setTime(date);
     	// return formatted date
