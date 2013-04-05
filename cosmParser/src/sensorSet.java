@@ -21,12 +21,22 @@ public class sensorSet {
 	    return uniqInstance;
 	  }
 	
-	//phenomena
+	 /*
+	//old phenomena
 	private String coPhenomenon = "dummy:ogc:co";
 	private String humidityPhenomenon = "urn:x-ogc:def:phenomenon:OGC:RelativeHumidity";
 	private String no2Phenomenon = "dummy:ogc:no2";
 	private String temperaturePhenomenon = "urn:x-ogc:def:phenomenon:OGC:AirTemperature";
 	private String o3Phenomenon = "dummy:ogc:o3";
+	*/
+	
+	//alternative phenomena
+	private String coPhenomenon = "urn:x-ogc:def:phenomenon:OGC:CarbonDioxide:uom:ppm";
+	private String humidityPhenomenon = "urn:x-ogc:def:phenomenon:OGC:RelativeHumidity:uom:%";
+	private String no2Phenomenon = "urn:x-ogc:def:phenomenon:OGC:NitrogenDioxide:uom:ppm";
+	private String temperaturePhenomenon = "urn:x-ogc:def:phenomenon:OGC:AirTemperature:uom:°C";
+	private String o3Phenomenon = "urn:x-ogc:def:phenomenon:OGC:Ozone:ppm";
+	
 	
 	//procedures
 	private String coProcedure = "urn:ogc:object:feature:Sensor:AQE:co-sensor";
