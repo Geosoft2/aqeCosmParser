@@ -125,7 +125,7 @@ public class AirQualityEgg {
 			Date date = dbCon.getLatestUpdate(feedID, phenomenon_id);
 			String start = utils.sqlDateToCosmString(date);
 			String end = utils.getCurrentTimeAsString();
-			logger.info("start: "+ start + "  end: "+end);
+		//	logger.info("start: "+ start + "  end: "+end);
 			
 			//get the collection of intervals like: 2012-12-02T11:00:01Z, 2012-12-02T23:00:00Z, 2012-12-02T23:00:01Z, 2012-12-03T11:00:00Z
 			ArrayList<String> intervalCollection = utils.splitInterval(start, end, splitIntervalDuration);
@@ -137,7 +137,7 @@ public class AirQualityEgg {
 				
 				//Create http GET request with parameter, format, start- and end time
 				String getString ="http://api.cosm.com/v2/feeds/"+feedID+"/datastreams/"+param+".json?start="+icIterator.next()+"&end="+icIterator.next()+"&interval="+interval+"&limit="+limit;
-				logger.info(getString);
+				//logger.info(getString);
 				httpGet = new HttpGet(getString);
 				httpGet.addHeader("X-ApiKey", API_KEY);
 
@@ -156,14 +156,14 @@ public class AirQualityEgg {
 						    BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
 						    String line = "";
 						    while ((line = rd.readLine()) != null) {
-						    	logger.info(line);
+						    	//logger.info(line);
 						        result += line;
 						      }
 						    //fill the local json arrays with values
 						    JSONObject obj = (JSONObject) new JSONParser().parse(result);
 						    JSONArray tempArray = (JSONArray) obj.get("datapoints");
 						    if (tempArray != null) {
-							    logger.info("my array:    "+ tempArray);
+							   // logger.info("my array:    "+ tempArray);
 						    	if(param == "CO") valuesCO.addAll(tempArray);
 							    else if (param == "humidity") valuesHumidity.addAll(tempArray);
 							    else if (param == "NO2") valuesNO2.addAll(tempArray);
@@ -184,7 +184,7 @@ public class AirQualityEgg {
 							if( httpResponse.getEntity() != null ) {
 						         httpResponse.getEntity().consumeContent();
 						      }
-							logger.warn("Ooops");
+							logger.warn("Ooops, no values available");
 						}
 						
 					}
