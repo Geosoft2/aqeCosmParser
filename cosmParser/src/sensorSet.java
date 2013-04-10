@@ -32,18 +32,18 @@ public class sensorSet {
 	
 	//alternative phenomena
 	private String coPhenomenon = "urn:x-ogc:def:phenomenon:OGC:CarbonDioxide:uom:ppm";
-	private String humidityPhenomenon = "urn:x-ogc:def:phenomenon:OGC:RelativeHumidity:uom:%";
+	private String humidityPhenomenon = "urn:x-ogc:def:phenomenon:OGC:RelativeHumidity:uom:percent";
 	private String no2Phenomenon = "urn:x-ogc:def:phenomenon:OGC:NitrogenDioxide:uom:ppm";
-	private String temperaturePhenomenon = "urn:x-ogc:def:phenomenon:OGC:AirTemperature:uom:°C";
+	private String temperaturePhenomenon = "urn:x-ogc:def:phenomenon:OGC:AirTemperature:uom:degreeCelsius";
 	private String o3Phenomenon = "urn:x-ogc:def:phenomenon:OGC:Ozone:ppm";
 	
 	
-	//procedures
-	private String coProcedure = "urn:ogc:object:feature:Sensor:AQE:co-sensor";
-	private String humidityProcedure = "urn:ogc:object:feature:Sensor:AQE:humidity-sensor";
-	private String no2Procedure = "urn:ogc:object:feature:Sensor:AQE:no2-sensor";
-	private String temperatureProcedure = "urn:ogc:object:feature:Sensor:AQE:temperature-sensor";
-	private String o3Procedure = "urn:ogc:object:feature:Sensor:AQE:o3-sensor";
+	//procedures urn:ogc:def:procedure:aqe-humidity-sensor
+	private String coProcedure = "urn:ogc:def:procedure:aqe-co-sensor";
+	private String humidityProcedure = "urn:ogc:def:procedure:aqe-humidity-sensor";
+	private String no2Procedure = "urn:ogc:def:procedure:aqe-no2-sensor";
+	private String temperatureProcedure = "urn:ogc:def:procedure:aqe-temperature-sensor";
+	private String o3Procedure = "urn:ogc:def:procedure:aqe-o3-sensor";
 	
 	//offerings
 	private String coOffering = "CO_CONCENTRATION";
