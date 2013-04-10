@@ -150,7 +150,7 @@ public class AirQualityEgg {
 					/* Checking response */
 					if (httpResponse != null) {
 						// In case of success the status code is 2xx
-						logger.info("http status code: "+httpResponse.getStatusLine().getStatusCode());
+						//logger.info("http status code: "+httpResponse.getStatusLine().getStatusCode());
 						if (httpResponse.getStatusLine().getStatusCode() / 100 == 2 ) {
 							//Get the data in the entity
 						    BufferedReader rd = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
