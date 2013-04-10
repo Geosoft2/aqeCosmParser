@@ -97,7 +97,7 @@ public class databaseCon {
 			PreparedStatement pstmt = con.prepareStatement(INSERT_RECORD);
 			pstmt.setString(1, feedID);
 			
-			Date date = utils.toDate(timestamp);
+			Date date = utils.overlongTimestampToDate(timestamp);
 
 			java.sql.Timestamp sqlDate = new java.sql.Timestamp(date.getTime());
 			pstmt.setTimestamp(2, sqlDate);
@@ -133,7 +133,7 @@ public class databaseCon {
 			ResultSet rs = stmt.executeQuery(query);
 			if (rs.next()) result = rs.getTimestamp("date");
 		} catch (SQLException e) {
-			logger.info("Invalid query");
+			logger.warn("Invalid query: "+ query, e);
 			e.printStackTrace();
 		}
 		return result;
@@ -160,7 +160,7 @@ public class databaseCon {
 				eggInDatabase = false;
 			}
 		} catch (SQLException e) {
-			logger.warn("Invalid query");
+			logger.warn("Invalid query: "+ query, e);
 			e.printStackTrace();
 		}
 		return eggInDatabase;
@@ -177,7 +177,7 @@ public class databaseCon {
 			Statement stmt = con.createStatement();
 			stmt.execute(query);
 		} catch (SQLException e) {
-			logger.warn("Invalid query");
+			logger.warn("Invalid query: "+ query, e);
 			e.printStackTrace();
 		}
 	}
@@ -206,7 +206,7 @@ public class databaseCon {
 				Statement stmt = con.createStatement();
 				stmt.execute(query);
 			} catch (SQLException e) {
-				logger.warn("Invalid query");
+				logger.warn("Invalid query: "+ query, e);
 				e.printStackTrace();
 			}
 		}
@@ -231,7 +231,7 @@ public class databaseCon {
 				phenomenonInDatabase = false;
 			}
 		} catch (SQLException e) {
-			logger.warn("Invalid query");
+			logger.warn("Invalid query: "+ query, e);
 			e.printStackTrace();
 		}
 		return phenomenonInDatabase;
@@ -249,7 +249,7 @@ public class databaseCon {
 						Statement stmt = con.createStatement();
 						stmt.execute(query);
 					} catch (SQLException e) {
-						logger.warn("Invalid query");
+						logger.warn("Invalid query: "+ query, e);
 						e.printStackTrace();
 					}
 				}
@@ -274,7 +274,7 @@ public class databaseCon {
 				procedureInDatabase = false;
 			}
 		} catch (SQLException e) {
-			logger.info("Invalid query");
+			logger.warn("Invalid query: "+ query, e);
 			e.printStackTrace();
 		}
 		return procedureInDatabase;
@@ -294,7 +294,7 @@ public class databaseCon {
 						Statement stmt = con.createStatement();
 						stmt.execute(query);
 					} catch (SQLException e) {
-						logger.warn("Invalid query");
+						logger.warn("Invalid query: "+ query, e);
 						e.printStackTrace();
 					}
 				}
@@ -319,7 +319,7 @@ public class databaseCon {
 				offeringInDatabase = false;
 			}
 		} catch (SQLException e) {
-			logger.info("Invalid query");
+			logger.warn("Invalid query: "+ query, e);
 			e.printStackTrace();
 		}
 		return offeringInDatabase;
@@ -339,7 +339,7 @@ public class databaseCon {
 				Statement stmt = con.createStatement();
 				stmt.execute(query);
 			} catch (SQLException e) {
-				logger.warn("Invalid query");
+				logger.warn("Invalid query: "+ query, e);
 				e.printStackTrace();
 			}
 		}
@@ -369,7 +369,7 @@ public class databaseCon {
 				linkEstablished = false;
 			}
 		} catch (SQLException e) {
-			logger.warn("Invalid query");
+			logger.warn("Invalid query: "+ query, e);
 			e.printStackTrace();
 		}
 		return linkEstablished;
@@ -400,7 +400,7 @@ public class databaseCon {
 			//create new row in the quality table for the observation
 			this.writeQuality(observation_id);
 		} catch (SQLException e) {
-			logger.warn("Invalid query");
+			logger.warn("Invalid query: "+ query, e);
 			e.printStackTrace();
 		}
 		
@@ -433,10 +433,10 @@ public class databaseCon {
 			ResultSet rs = stmt.executeQuery(query);
 			if (rs.next()  && rs.getObject("date")!=null){
 				result = rs.getTimestamp("date");
-				logger.info("myDate: "+result.toString());
+				//logger.info("myDate: "+result.toString());
 			}
 		} catch (SQLException e) {
-			logger.warn("Invalid query");
+			logger.warn("Invalid query: "+ query, e);
 			e.printStackTrace();
 		}
 		return result;
