@@ -40,7 +40,7 @@ public class AirQualityEgg {
 	private HttpGet httpGet;
 	private HttpResponse httpResponse;
 	//standard values for 
-	private int interval = 60; //one datapoint every 60 seconds
+	private int interval = 300; //one datapoint every 60 seconds
 	private int limit = 1000; //max. 100 results per request, up to 1000 possible -> poor performance 
 	private int splitIntervalDuration = 12; //hours
 	private Utilities utils = new Utilities();
@@ -69,9 +69,9 @@ public class AirQualityEgg {
 		
 		//load data from properties file into attributes
 		properties.load(new FileInputStream("config.properties"));
-		this.interval = Integer.valueOf((String)properties.get("interval"));
-		this.limit = Integer.valueOf((String) properties.get("limit"));
-		this.splitIntervalDuration = Integer.valueOf((String) properties.get("splitIntervalDuration"));
+		//this.interval = Integer.valueOf((String)properties.get("interval"));
+		//this.limit = Integer.valueOf((String) properties.get("limit"));
+		//this.splitIntervalDuration = Integer.valueOf((String) properties.get("splitIntervalDuration"));
 		this.API_KEY = (String) properties.getProperty("apikey");
 		
 		//create http client
