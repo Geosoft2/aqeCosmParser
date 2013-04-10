@@ -361,6 +361,16 @@ public class AirQualityEgg {
 		this.valuesTemp = valuesTemp;
 	}
 
+
+	public String getFeedID() {
+		return feedID;
+	}
+
+
+	public void setFeedID(String feedID) {
+		this.feedID = feedID;
+	}
+
 	
 	
 	
