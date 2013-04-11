@@ -462,6 +462,31 @@ public class databaseCon {
 	}
 	
 	
+	/**
+	 * Method deletes the values of a feature stored in the observation and quality table (for test data generator)
+	 * @param feature_id the id of a feature
+	 */
+	public void deleteObservationAndQuality(String feature_id){
+		//first delete the quality entries
+		String query = "DELETE FROM quality WHERE quality.observation_id IN (SELECT observation_id FROM quality NATURAL INNER JOIN feature_of_interest WHERE feature_of_interest_id='"+feature_id+"');";
+		try {
+			Statement stmt = con.createStatement();
+			stmt.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		//delete observation entries
+		query = "DELETE FROM observation WHERE feature_of_interest_id='"+feature_id+"';";
+		try {
+			Statement stmt = con.createStatement();
+			stmt.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
 	
 	
