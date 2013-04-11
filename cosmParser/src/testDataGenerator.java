@@ -17,12 +17,10 @@ public class testDataGenerator {
 	
 	databaseCon dbCon;
 	eggSeeker seeker;
-	int winWidth;
 	Utilities utils = new Utilities();
 	
-	testDataGenerator(int winWidth){
+	testDataGenerator(){
 		try {
-			this.winWidth = winWidth;
 			this.dbCon = new databaseCon();
 			this.seeker = new eggSeeker();
 		} catch (FileNotFoundException e) {
@@ -56,29 +54,32 @@ public class testDataGenerator {
 		}
 		
 		try {
+			// Crate new Date object
+			Date start = new Date();
+			start = utils.substractHours(start, 48);
 			// create new air quality egg
 			AirQualityEgg aqe = new AirQualityEgg(feedID);
 			//[{"at":"2013-03-22T10:34:36.392532Z","value":"23.80"},{"at":"2013-03-22T10:36:30.655278Z","value":"23.70"}]
 			
 			//humidity -> Check!
-			aqe.setValuesHumidity(this.generateData(number, 60, 0, 100, 10, 10));
+			aqe.setValuesHumidity(this.generateData(start, number, 60, 0, 100, 10, 10));
 			
 			//Kohlenstoffmonoxid -> Check!
 			//http://de.wikipedia.org/wiki/Kohlenstoffmonoxid
-			aqe.setValuesCO(this.generateData(number, 150, 0, 7000, 10, 50));
+			aqe.setValuesCO(this.generateData(start, number, 150, 0, 7000, 10, 50));
 			
 			// nitrogen oxide -> Check!
 			//http://cfpub.epa.gov/eroe/index.cfm?fuseaction=detail.viewInd&lv=list.listbyalpha&r=231330&subtop=341
-			aqe.setValuesNO2(this.generateData(number, 0.03, 0, 1, 10, 0.01));
+			aqe.setValuesNO2(this.generateData(start, number, 0.03, 0, 1, 10, 0.01));
 			
 			// ozone
 			//http://www.umwelt.nrw.de/umwelt/luftqualitaet/ozon/belastung.php
 			//http://www.lenntech.com/calculators/ppm/converter-parts-per-million.htm
 			// average nrw ca. 35 yg/m³ -> 0.035 mg/m³ -> 0.0173 ppm, 240 yg/m³ -> 0.24 mg/m³ -> 0.118 ppm,
-			aqe.setValuesO3(this.generateData(number, 0.0173, 0, 0.118, 10, 0.01));
+			aqe.setValuesO3(this.generateData(start, number, 0.0173, 0, 0.118, 10, 0.01));
 			
 			// temperature -> Check!
-			aqe.setValuesTemp(this.generateData(number, 9.8, -10, 40, 10, 5));
+			aqe.setValuesTemp(this.generateData(start, number, 9.8, -10, 40, 10, 5));
 			
 			aqe.writeAllToDatabase();
 		} catch (FileNotFoundException e) {
@@ -106,14 +107,17 @@ public class testDataGenerator {
 	 * @param multiplicator interval in which the generated values are 
 	 * @return JSONArray containing artificial timestamps and values
 	 */
-	public JSONArray generateData(int n, double mean, double from, double to, int outlierProbability, double multiplicator){
+	public JSONArray generateData(Date start, int n, double mean, double from, double to, int outlierProbability, double multiplicator){
 		
 		// empty jsonarray
 		JSONArray array = new JSONArray();
 		
+		String timeStamp = utils.sqlDateToCosmString(start);
+		System.out.println(timeStamp);
 		// generate time stamp
-		String timeStamp = utils.getCurrentTimeAsString();
-		timeStamp = timeStamp.substring(0, timeStamp.length()-1)+".000000Z";
+		//String timeStamp = utils.getCurrentTimeAsString();
+		//timeStamp = timeStamp.substring(0, timeStamp.length()-1)+".000000Z";
+		
 		
 		// loop that generates values
 		for (int i=0; i<n; i++){
