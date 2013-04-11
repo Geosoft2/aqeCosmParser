@@ -35,7 +35,7 @@ public class sensorSet {
 	private String humidityPhenomenon = "urn:x-ogc:def:phenomenon:OGC:RelativeHumidity:uom:percent";
 	private String no2Phenomenon = "urn:x-ogc:def:phenomenon:OGC:NitrogenDioxide:uom:ppm";
 	private String temperaturePhenomenon = "urn:x-ogc:def:phenomenon:OGC:AirTemperature:uom:degreeCelsius";
-	private String o3Phenomenon = "urn:x-ogc:def:phenomenon:OGC:Ozone:ppm";
+	private String o3Phenomenon = "urn:x-ogc:def:phenomenon:OGC:Ozone:uom:ppm";
 	
 	
 	//procedures urn:ogc:def:procedure:aqe-humidity-sensor
