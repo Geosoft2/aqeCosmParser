@@ -468,7 +468,7 @@ public class databaseCon {
 	 */
 	public void deleteObservationAndQuality(String feature_id){
 		//first delete the quality entries
-		String query = "DELETE FROM quality WHERE quality.observation_id IN (SELECT observation_id FROM quality NATURAL INNER JOIN feature_of_interest WHERE feature_of_interest_id='"+feature_id+"');";
+		String query = "DELETE FROM quality WHERE observation_id IN (SELECT observation_id FROM quality NATURAL INNER JOIN observation NATURAL INNER JOIN feature_of_interest WHERE feature_of_interest_id='"+feature_id+"');";
 		try {
 			Statement stmt = con.createStatement();
 			stmt.execute(query);
