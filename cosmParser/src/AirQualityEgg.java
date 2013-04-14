@@ -112,14 +112,14 @@ public class AirQualityEgg {
 		databaseCon dbCon = new databaseCon();
 		String result = "";
 		//filter wrong parameters
-		if ((param != "CO") && (param != "humidity") && (param != "NO2") && (param != "temperature") && (param != "O3")) throw new Exception("Unsupported parameter");
+		if ((!param.equals("CO")) && (!param.equals("humidity")) && (!param.equals("NO2")) && (!param.equals("temperature")) && (!param.equals("O3"))) throw new Exception("Unsupported parameter");
 		else {
 			String phenomenon_id = "";
-			if (param == "CO") phenomenon_id = aqeSensors.getCoPhenomenon();
-			else if (param == "humidity") phenomenon_id = aqeSensors.getHumidityPhenomenon();
-			else if (param == "NO2") phenomenon_id = aqeSensors.getNo2Phenomenon();
-			else if (param == "temperature") phenomenon_id = aqeSensors.getTemperaturePhenomenon();
-			else if (param == "O3") phenomenon_id = aqeSensors.getO3Phenomenon();
+			if (param.equals("CO")) phenomenon_id = aqeSensors.getCoPhenomenon();
+			else if (param.equals("humidity")) phenomenon_id = aqeSensors.getHumidityPhenomenon();
+			else if (param.equals("NO2")) phenomenon_id = aqeSensors.getNo2Phenomenon();
+			else if (param.equals("temperature")) phenomenon_id = aqeSensors.getTemperaturePhenomenon();
+			else if (param.equals("O3")) phenomenon_id = aqeSensors.getO3Phenomenon();
 
 			//get the time interval for that the request has to be constructed
 			Date date = dbCon.getLatestUpdate(feedID, phenomenon_id);
