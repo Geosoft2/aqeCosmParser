@@ -25,6 +25,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
+		
 		//logging stuff
 		Logger logger = Logger.getRootLogger();
 		PropertyConfigurator.configure("log4j.properties");
@@ -91,12 +92,19 @@ public class Main {
 		}
 		
 		/*
-		
-		testDataGenerator gen = new testDataGenerator(30);
-		gen.addTestEgg();
+		logger.info("Generate test data...");
+		testDataGenerator gen = new testDataGenerator();
+		//generate test data for two days
+		logger.info("...for first egg");
+		gen.addTestEgg("00000", "AQE Test Unit 00", "Artificial AQE", "51.961298", "7.590008");
+		logger.info("...for second egg");
+		gen.addTestEgg("00001", "AQE Test Unit 01", "Artificial AQE", "51.970288", "7.565374");
+		logger.info("...for third egg");
+		gen.addTestEgg("00002", "AQE Test Unit 02", "Artificial AQE", "51.973504", "7.631888");
 		//gen.generateAirHumidityData(576);
-		 * 
-		 */
+		logger.info("Test data generated!");
+		*/
+		 
 		
 	}
 
