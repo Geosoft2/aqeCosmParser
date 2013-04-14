@@ -147,10 +147,10 @@ public class eggSeeker {
 			//close database connection
 			dbCon.disconnect();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			logger.warn("Config file for database connection not found",e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.warn(e);
 			e.printStackTrace();
 		}
 		
@@ -223,7 +223,7 @@ public class eggSeeker {
 				}
 			}
 		} catch (Exception e) {
-			logger.warn("Something went wrong");
+			logger.warn("Something went wrong", e);
 			e.printStackTrace();
 		}
 		
@@ -250,10 +250,10 @@ public class eggSeeker {
 			
 			dbCon.disconnect();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			logger.warn("Config file for database connection not found",e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.warn(e);
 			e.printStackTrace();
 		}
 	}
@@ -277,10 +277,10 @@ public class eggSeeker {
 			
 			dbCon.disconnect();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			logger.warn("Config file for database connection not found",e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.warn(e);
 			e.printStackTrace();
 		}
 	}
@@ -304,10 +304,10 @@ public class eggSeeker {
 			
 			dbCon.disconnect();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			logger.warn("Config file for database connection not found",e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.warn(e);
 			e.printStackTrace();
 		}
 	}
@@ -334,10 +334,10 @@ public class eggSeeker {
 		
 			dbCon.disconnect();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			logger.warn("Config file for database connection not found",e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.warn(e);
 			e.printStackTrace();
 		}
 	}
@@ -364,10 +364,10 @@ public class eggSeeker {
 		
 			dbCon.disconnect();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			logger.warn("Config file for database connection not found",e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.warn(e);
 			e.printStackTrace();
 		}
 	}
@@ -394,10 +394,10 @@ public class eggSeeker {
 
 			dbCon.disconnect();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			logger.warn("Config file for database connection not found",e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.warn(e);
 			e.printStackTrace();
 		}
 	}
@@ -426,10 +426,10 @@ public class eggSeeker {
 			
 			dbCon.disconnect();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			logger.warn("Config file for database connection not found",e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.warn(e);
 			e.printStackTrace();
 		}
 	}
@@ -457,10 +457,10 @@ public class eggSeeker {
 			
 			dbCon.disconnect();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			logger.warn("Config file for database connection not found",e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.warn(e);
 			e.printStackTrace();
 		}
 	}
