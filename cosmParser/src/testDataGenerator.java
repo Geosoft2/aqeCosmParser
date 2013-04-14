@@ -1,5 +1,7 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -32,15 +34,17 @@ public class testDataGenerator {
 		}
 	}
 	
-	public void addTestEgg(){
+	public void addTestEgg(String id, String name, String description, String lat, String lon){
 		//feedID, title, description, lat, lon
 		ArrayList<String> eggMetadata = new ArrayList<String>();
-		String[] first = {"00000", "AQE Test Unit", "Artificial AQE", "51.961298", "7.590008"};
+		String[] first = {id, name, description, lat, lon};
+		//String[] first = {"00000", "AQE Test Unit", "Artificial AQE", "51.961298", "7.590008"};
 		for (String s : first){
 			eggMetadata.add(s);
 		}
 		String feedID = eggMetadata.get(0);
 		
+		// 576 = 2 * 24 * 60/5 -> One value in 5 minutes for 2 days
 		int number = 576;
 		
 		if (!dbCon.isEggInDatabase(feedID)) {
@@ -52,6 +56,9 @@ public class testDataGenerator {
 			//establish link between procedure and feature_of_interest table
 			seeker.linkProceduresToFeatureOfInterest(feedID);
 		}
+		
+		// delete old test data
+		dbCon.deleteObservationAndQuality(feedID);
 		
 		try {
 			// Crate new Date object
@@ -113,7 +120,6 @@ public class testDataGenerator {
 		JSONArray array = new JSONArray();
 		
 		String timeStamp = utils.sqlDateToCosmString(start);
-		System.out.println(timeStamp);
 		// generate time stamp
 		//String timeStamp = utils.getCurrentTimeAsString();
 		//timeStamp = timeStamp.substring(0, timeStamp.length()-1)+".000000Z";
@@ -143,6 +149,9 @@ public class testDataGenerator {
 			}
 			
 			//System.out.println(value);
+			
+			// round to three decimal places
+			value = Math.floor(value * 1000) / 1000.0;
 			
 			// generate jsonobject and add to jsonarray
 			try {
